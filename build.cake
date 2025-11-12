@@ -10,7 +10,7 @@ IProcess webProcess = null;
 Task("Build")
     .Does(() => {
         Information("Building project...");
-        DotNetBuild("./OpenPassword.sln", new DotNetBuildSettings {
+        DotNetBuild("./OpenPassword.slnx", new DotNetBuildSettings {
             Configuration = configuration
         });
     });
@@ -66,7 +66,7 @@ Task("Test")
         };
 
 
-        DotNetTest("./OpenPassword.sln", testSettings);
+        DotNetTest("./OpenPassword.slnx", testSettings);
     });
 
 Teardown(context =>
