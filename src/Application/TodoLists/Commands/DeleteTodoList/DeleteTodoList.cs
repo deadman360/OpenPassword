@@ -2,7 +2,7 @@
 
 namespace OpenPassword.Application.TodoLists.Commands.DeleteTodoList;
 
-public record DeleteTodoListCommand(int Id) : IRequest;
+public record DeleteTodoListCommand(string? Id) : IRequest;
 
 public class DeleteTodoListCommandHandler : IRequestHandler<DeleteTodoListCommand>
 {
@@ -19,7 +19,7 @@ public class DeleteTodoListCommandHandler : IRequestHandler<DeleteTodoListComman
             .Where(l => l.Id == request.Id)
             .SingleOrDefaultAsync(cancellationToken);
 
-        Guard.Against.NotFound(request.Id, entity);
+        Guard.Against.NotFound(request.Id!, entity);
 
         _context.TodoLists.Remove(entity);
 

@@ -5,9 +5,9 @@ namespace OpenPassword.Application.TodoItems.Commands.UpdateTodoItemDetail;
 
 public record UpdateTodoItemDetailCommand : IRequest
 {
-    public int Id { get; init; }
+    public string? Id { get; init; }
 
-    public int ListId { get; init; }
+    public string? ListId { get; init; }
 
     public PriorityLevel Priority { get; init; }
 
@@ -26,9 +26,9 @@ public class UpdateTodoItemDetailCommandHandler : IRequestHandler<UpdateTodoItem
     public async Task Handle(UpdateTodoItemDetailCommand request, CancellationToken cancellationToken)
     {
         var entity = await _context.TodoItems
-            .FindAsync(new object[] { request.Id }, cancellationToken);
+            .FindAsync(new object[] { request.Id! }, cancellationToken);
 
-        Guard.Against.NotFound(request.Id, entity);
+        Guard.Against.NotFound(request.Id!, entity);
 
         entity.ListId = request.ListId;
         entity.Priority = request.Priority;

@@ -4,7 +4,7 @@ namespace OpenPassword.Application.TodoItems.Commands.UpdateTodoItem;
 
 public record UpdateTodoItemCommand : IRequest
 {
-    public int Id { get; init; }
+    public string? Id { get; init; }
 
     public string? Title { get; init; }
 
@@ -23,9 +23,9 @@ public class UpdateTodoItemCommandHandler : IRequestHandler<UpdateTodoItemComman
     public async Task Handle(UpdateTodoItemCommand request, CancellationToken cancellationToken)
     {
         var entity = await _context.TodoItems
-            .FindAsync(new object[] { request.Id }, cancellationToken);
+            .FindAsync(new object[] { request.Id! }, cancellationToken);
 
-        Guard.Against.NotFound(request.Id, entity);
+        Guard.Against.NotFound(request.Id!, entity);
 
         entity.Title = request.Title;
         entity.Done = request.Done;
