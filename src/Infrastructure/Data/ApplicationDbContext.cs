@@ -7,16 +7,15 @@ using Microsoft.EntityFrameworkCore;
 
 namespace OpenPassword.Infrastructure.Data;
 
-public class ApplicationDbContext : IdentityDbContext<ApplicationUser>, IApplicationDbContext
+public class ApplicationDbContext : DbContext, IApplicationDbContext
 {
     public ApplicationDbContext(DbContextOptions<ApplicationDbContext> options) : base(options) { }
 
     public DbSet<TodoList> TodoLists => Set<TodoList>();
 
     public DbSet<TodoItem> TodoItems => Set<TodoItem>();
-
-    public DbSet<User> User => Set<User>();
-
+    
+    public DbSet<User> Users => Set<User>();
     protected override void OnModelCreating(ModelBuilder builder)
     {
         base.OnModelCreating(builder);

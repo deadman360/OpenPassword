@@ -6,7 +6,6 @@ public class User : BaseAuditableEntity
 
     public string? Email { get; set; }
     
-    public PublicKey? Key { get; set; }
-    
+    public string? PublicKey { get; set; }
     public Role? Role { get; set; }
 }
