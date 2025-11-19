@@ -2,13 +2,13 @@ using System.Security.Cryptography;
 using NBitcoin;
 using OpenPassword.Application.Common.Interfaces;
 
-namespace Microsoft.Extensions.DependencyInjection.Users.Commands.RegisterKey;
+namespace OpenPassword.Application.Users.Commands.RegisterUserKey;
 
-public class RegisterKeyCommand : IRequest<string>
+public class RegisterUserKeyCommand : IRequest<string>
 {
     public string? UserId { get; init; }
     
-    public class RegisterKeyCommandHandler : IRequestHandler<RegisterKeyCommand, string>
+    public class RegisterKeyCommandHandler : IRequestHandler<RegisterUserKeyCommand, string>
     {
         private readonly IApplicationDbContext _context;
         
@@ -17,12 +17,12 @@ public class RegisterKeyCommand : IRequest<string>
             _context = context;
         }
     
-        public async Task<string> Handle(RegisterKeyCommand request, CancellationToken cancellationToken)
+        public async Task<string> Handle(RegisterUserKeyCommand request, CancellationToken cancellationToken)
         {
-            var mnemonicPhrase = new Mnemonic(Wordlist.English, WordCount.Twelve);
-            string phrase = mnemonicPhrase.ToString();
+            var mnemonicPhraseBase = new Mnemonic(Wordlist.English, WordCount.Twelve);
+            string mnemonicPhraseString = mnemonicPhraseBase.ToString();
             
-            byte[] seed = mnemonicPhrase.DeriveSeed();
+            byte[] seed = mnemonicPhraseBase.DeriveSeed();
             byte[] privateKeyBytes = seed.Take(32).ToArray();
             using var userPrivateKey = ECDiffieHellman.Create(ECCurve.NamedCurves.nistP256);
             userPrivateKey.ImportECPrivateKey(privateKeyBytes, out _);
@@ -36,7 +36,7 @@ public class RegisterKeyCommand : IRequest<string>
             entity!.PublicKey = Convert.ToBase64String(publicKeyBytes);
             
             //TODO: Add Domain Event
-            entity!.DomainEvents.Updated();
+            // entity!.DomainEvents.Updated();
             
             await _context.SaveChangesAsync(cancellationToken);
             return Convert.ToBase64String(privateKeyBytes);
